@@ -22,4 +22,8 @@ public class TOTP extends HOTP {
     public String getCode() {
         return this.getCode(System.currentTimeMillis());
     }
+
+    public long getTimeStep() {
+        return timeStep;
+    }
 }

@@ -6,6 +6,8 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 public class HOTP {
+    private final HMAC hmac;
+    private final int passwordLength;
     private final Mac mac;
     private final int modDivisor;
     private final String format;
@@ -18,6 +20,8 @@ public class HOTP {
     }
 
     public HOTP(HMAC hmac, String secret, int passwordLength) {
+        this.hmac = hmac;
+        this.passwordLength = passwordLength;
         try {
             mac =Mac.getInstance(hmac.getAlgorithm());
             mac.init(new SecretKeySpec(Util.decodeBase32String(secret), hmac.getAlgorithm()));
@@ -52,5 +56,13 @@ public class HOTP {
                 (byte) (n >>> 8),
                 (byte) n,
         };
+    }
+
+    public HMAC getHmac() {
+        return hmac;
+    }
+
+    public int getPasswordLength() {
+        return passwordLength;
     }
 }
