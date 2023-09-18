@@ -10,19 +10,11 @@ public class HOTP {
     private final int modDivisor;
     private final String format;
 
-    private static final int DEFAULT_PASSWORD_LENGTH = 6;
-    private static final HMAC DEFAULT_HMAC = HMAC.SHA1;
+    public static final int DEFAULT_PASSWORD_LENGTH = 6;
+    public static final HMAC DEFAULT_HMAC = HMAC.SHA1;
 
     public HOTP(String secret) {
         this(DEFAULT_HMAC, secret, DEFAULT_PASSWORD_LENGTH);
-    }
-
-    public HOTP(HMAC hmac, String secret) {
-        this(hmac, secret, DEFAULT_PASSWORD_LENGTH);
-    }
-
-    public HOTP(String secret, int passwordLength) {
-        this(DEFAULT_HMAC, secret, passwordLength);
     }
 
     public HOTP(HMAC hmac, String secret, int passwordLength) {
