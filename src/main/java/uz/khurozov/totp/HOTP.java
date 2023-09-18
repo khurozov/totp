@@ -11,24 +11,24 @@ public class HOTP {
     private final String format;
 
     private static final int DEFAULT_PASSWORD_LENGTH = 6;
-    private static final String DEFAULT_HMAC_ALGORITHM = "HmacSHA1";
+    private static final HMAC DEFAULT_HMAC = HMAC.SHA1;
 
     public HOTP(String secret) {
-        this(DEFAULT_HMAC_ALGORITHM, secret, DEFAULT_PASSWORD_LENGTH);
+        this(DEFAULT_HMAC, secret, DEFAULT_PASSWORD_LENGTH);
     }
 
-    public HOTP(String algorithm, String secret) {
-        this(algorithm, secret, DEFAULT_PASSWORD_LENGTH);
+    public HOTP(HMAC hmac, String secret) {
+        this(hmac, secret, DEFAULT_PASSWORD_LENGTH);
     }
 
     public HOTP(String secret, int passwordLength) {
-        this(DEFAULT_HMAC_ALGORITHM, secret, passwordLength);
+        this(DEFAULT_HMAC, secret, passwordLength);
     }
 
-    public HOTP(String algorithm, String secret, int passwordLength) {
+    public HOTP(HMAC hmac, String secret, int passwordLength) {
         try {
-            mac =Mac.getInstance(algorithm);
-            mac.init(new SecretKeySpec(Util.decodeBase32String(secret), algorithm));
+            mac =Mac.getInstance(hmac.getAlgorithm());
+            mac.init(new SecretKeySpec(Util.decodeBase32String(secret), hmac.getAlgorithm()));
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new IllegalArgumentException(e);
         }
