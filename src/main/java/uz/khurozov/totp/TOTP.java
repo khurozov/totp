@@ -18,4 +18,8 @@ public class TOTP extends HOTP {
     public String getCode(long millis) {
         return super.getCode(millis / timeStep);
     }
+
+    public String getCode() {
+        return this.getCode(System.currentTimeMillis());
+    }
 }
