@@ -9,7 +9,7 @@ Add maven dependency to your project
 <dependency>
     <groupId>uz.khurozov</groupId>
     <artifactId>totp</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
