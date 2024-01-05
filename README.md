@@ -15,10 +15,9 @@ Add maven dependency to your project
 
 ## Defaults
 
-- HMAC algorithm: HmacSHA1
-- Length of generated OTP code: 6
-- Time step: 30 seconds
-- Generated secret length: 32
+- Algorithm: SHA1
+- Digits: 6
+- Period: 30 seconds
 
 ## Example
 
@@ -27,37 +26,18 @@ import uz.khurozov.totp.*;
 
 public class Demo {
     public static void main(String[] args) {
-        // previously generated secrets can be used
-        String secret1 = "6GCM7ZFJJGEMHIWZSPQRXV2B66EO7PUS";
-
-        // new secrets can be generated using Util class
-        // recommended to use multiples of 8
-        String secret2 = Util.generateBase32Secret(64);
-
+        // previously generated BASE32 secret
+        String secret = "6GCM7ZFJJGEMHIWZSPQRXV2B66EO7PUS";
+        System.out.println("secret: " + secret);
 
         // TOTP instance can be created for a secret once
-        // and generate codes continuously
-
-        System.out.println("secret1: " + secret1);
-        TOTP totp1 = new TOTP(secret1);
+        // and generate codes repeatedly
+        TOTP totp = new TOTP(secret);
         for (int i = 0; i < 10; ++i) {
-            System.out.println(totp1.getCode());
+            System.out.println(totp.getCode());
 
             try {
-                Thread.sleep(totp1.getPeriod());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-
-        System.out.println("secret2: " + secret2);
-        TOTP totp2 = new TOTP(Algorithm.SHA512, secret2, 8, TOTP.DEFAULT_PERIOD);
-        for (int i = 0; i < 10; ++i) {
-            System.out.println(totp2.getCode());
-
-            try {
-                Thread.sleep(totp2.getPeriod());
+                Thread.sleep(totp.getPeriod());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

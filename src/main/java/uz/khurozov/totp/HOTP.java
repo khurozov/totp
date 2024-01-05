@@ -1,7 +1,10 @@
 package uz.khurozov.totp;
 
+import org.apache.commons.codec.binary.Base32;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -13,6 +16,7 @@ public class HOTP {
 
     public static final int DEFAULT_PASSWORD_LENGTH = 6;
     public static final Algorithm DEFAULT_ALGORITHM = Algorithm.SHA1;
+    private static final Base32 BASE_32 = new Base32();
 
     public HOTP(String secret) {
         this(DEFAULT_ALGORITHM, secret, DEFAULT_PASSWORD_LENGTH);
@@ -23,12 +27,15 @@ public class HOTP {
         this.digits = digits;
         try {
             mac =Mac.getInstance(algorithm.getHmac());
-            mac.init(new SecretKeySpec(Util.decodeBase32String(secret), algorithm.getHmac()));
+            mac.init(new SecretKeySpec(
+                    BASE_32.decode(secret.getBytes(StandardCharsets.UTF_8)),
+                    algorithm.getHmac()
+            ));
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new IllegalArgumentException(e);
         }
 
-        this.modDivisor = Util.powTen(digits);
+        this.modDivisor = (int) Math.pow(10, digits);
     }
 
     public String getCode(long counter) {
