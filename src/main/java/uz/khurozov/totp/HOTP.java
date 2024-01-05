@@ -6,31 +6,29 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 public class HOTP {
-    private final HMAC hmac;
-    private final int passwordLength;
+    private final Algorithm algorithm;
+    private final int digits;
     private final Mac mac;
     private final int modDivisor;
-    private final String format;
 
     public static final int DEFAULT_PASSWORD_LENGTH = 6;
-    public static final HMAC DEFAULT_HMAC = HMAC.SHA1;
+    public static final Algorithm DEFAULT_ALGORITHM = Algorithm.SHA1;
 
     public HOTP(String secret) {
-        this(DEFAULT_HMAC, secret, DEFAULT_PASSWORD_LENGTH);
+        this(DEFAULT_ALGORITHM, secret, DEFAULT_PASSWORD_LENGTH);
     }
 
-    public HOTP(HMAC hmac, String secret, int passwordLength) {
-        this.hmac = hmac;
-        this.passwordLength = passwordLength;
+    public HOTP(Algorithm algorithm, String secret, int digits) {
+        this.algorithm = algorithm;
+        this.digits = digits;
         try {
-            mac =Mac.getInstance(hmac.getAlgorithm());
-            mac.init(new SecretKeySpec(Util.decodeBase32String(secret), hmac.getAlgorithm()));
+            mac =Mac.getInstance(algorithm.getHmac());
+            mac.init(new SecretKeySpec(Util.decodeBase32String(secret), algorithm.getHmac()));
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new IllegalArgumentException(e);
         }
 
-        this.modDivisor = Util.powTen(passwordLength);
-        this.format = "%0"+passwordLength+"d";
+        this.modDivisor = Util.powTen(digits);
     }
 
     public String getCode(long counter) {
@@ -42,7 +40,7 @@ public class HOTP {
                 | (hmacHash[offset++] & 0xff) << 8
                 | (hmacHash[offset] & 0xff);
 
-        return String.format(format, truncatedHash % modDivisor) ;
+        return String.format("%0"+digits+"d", truncatedHash % modDivisor) ;
     }
 
     private static byte[] longToByteArray(long n) {
@@ -58,11 +56,11 @@ public class HOTP {
         };
     }
 
-    public HMAC getHmac() {
-        return hmac;
+    public Algorithm getAlgorithm() {
+        return algorithm;
     }
 
-    public int getPasswordLength() {
-        return passwordLength;
+    public int getDigits() {
+        return digits;
     }
 }

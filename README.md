@@ -44,7 +44,7 @@ public class Demo {
             System.out.println(totp1.getCode());
 
             try {
-                Thread.sleep(totp1.getTimeStep());
+                Thread.sleep(totp1.getPeriod());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -52,12 +52,12 @@ public class Demo {
 
 
         System.out.println("secret2: " + secret2);
-        TOTP totp2 = new TOTP(HMAC.SHA512, secret2, 8, TOTP.DEFAULT_TIME_STEP);
+        TOTP totp2 = new TOTP(Algorithm.SHA512, secret2, 8, TOTP.DEFAULT_PERIOD);
         for (int i = 0; i < 10; ++i) {
             System.out.println(totp2.getCode());
 
             try {
-                Thread.sleep(totp2.getTimeStep());
+                Thread.sleep(totp2.getPeriod());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
