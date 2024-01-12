@@ -10,8 +10,8 @@ public class TOTP extends HOTP {
         this.period = DEFAULT_PERIOD;
     }
 
-    public TOTP(Algorithm algorithm, String secret, int passwordLength, long period) {
-        super(algorithm, secret, passwordLength);
+    public TOTP(Algorithm algorithm, String secret, int digits, long period) {
+        super(algorithm, secret, digits);
         this.period = period;
     }
 

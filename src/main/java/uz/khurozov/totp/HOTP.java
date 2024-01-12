@@ -14,12 +14,12 @@ public class HOTP {
     private final Mac mac;
     private final int modDivisor;
 
-    public static final int DEFAULT_PASSWORD_LENGTH = 6;
+    public static final int DEFAULT_DIGITS = 6;
     public static final Algorithm DEFAULT_ALGORITHM = Algorithm.SHA1;
     private static final Base32 BASE_32 = new Base32();
 
     public HOTP(String secret) {
-        this(DEFAULT_ALGORITHM, secret, DEFAULT_PASSWORD_LENGTH);
+        this(DEFAULT_ALGORITHM, secret, DEFAULT_DIGITS);
     }
 
     public HOTP(Algorithm algorithm, String secret, int digits) {
